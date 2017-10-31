@@ -21,6 +21,18 @@
 
 @implementation ViewController
 
+int cStyleFunc(id receiver, SEL sel, const void *arg1, const void *arg2) {
+    NSLog(@"%s was called, arg1 is %@, and arg2 is %@",
+          __FUNCTION__,
+          [NSString stringWithUTF8String:arg1],
+          [NSString stringWithUTF8String:arg1]);
+    return 1;
+}
+
+int cFunc(id receiver, SEL sel,int a,int b){
+    return a + b;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -42,11 +54,26 @@
     NSLog(@"retStr = %@ \n",retStr);
     
     // 为Person动态添加一个C函数方法
-    //class_addMethod([Person class], NSSelectorFromString(@"cFunc"),(IMP)cFunc), <#const char * _Nullable types#>)
+    class_addMethod(p.class, NSSelectorFromString(@"cStyleFunc"), (IMP)cStyleFunc, "i@:r^vr^v");
+    int value = ((int (*)(id, SEL, const void *, const void *))
+                 objc_msgSend)((id)p,
+                               NSSelectorFromString(@"cStyleFunc"),
+                               "参数1",
+                               "参数2");
+    NSLog(@"value = %d",value);
+    
+    class_addMethod(p.class, NSSelectorFromString(@"cFunc"), (IMP)cFunc, "");
+    value = ((int (*)(id, SEL,int,int))
+             objc_msgSend)((id)p,
+                           NSSelectorFromString(@"cFunc"),
+                           100,
+                           200);
+    NSLog(@"value = %d",value);
+    // 返回结构体的函数
+    CGRect frame = ((CGRect (*)(id,SEL))objc_msgSend_stret)(p, @selector(cStruct));
+    NSLog(@"frame = %@",NSStringFromCGRect(frame));
+   
 }
 
-int cFunc(int arg1,int arg2) {
-    return arg1 + arg2;
-}
 
 @end

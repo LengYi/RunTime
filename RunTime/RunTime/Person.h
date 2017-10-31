@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface Person : NSObject
 
@@ -21,5 +22,8 @@
 
 // 带参数带返回值的函数
 - (NSString *)haha:(NSString *)name age:(NSString *)age;
+
+// 返回结构体的函数
+- (CGRect)cStruct;
 
 @end

@@ -26,4 +26,8 @@
     return [NSString stringWithFormat:@"%@ 岁的 %@ 笑哈哈~~~",age,name];
 }
 
+- (CGRect)cStruct{
+     CGRect rect = CGRectMake(0, 0, 200, 200);
+    return rect;
+}
 @end
