@@ -53,7 +53,7 @@ int cFunc(id receiver, SEL sel,int a,int b){
     retStr = ((id (*)(id,SEL,id,id))objc_msgSend)(p, @selector(haha:age:),@"Nick",@"25");
     NSLog(@"retStr = %@ \n",retStr);
     
-    // 为Person动态添加一个C函数方法
+    // 为Person动态添加一个C函数方法    i代表返回值int，@代表id类型对象，:代表选择子
     class_addMethod(p.class, NSSelectorFromString(@"cStyleFunc"), (IMP)cStyleFunc, "i@:r^vr^v");
     int value = ((int (*)(id, SEL, const void *, const void *))
                  objc_msgSend)((id)p,
