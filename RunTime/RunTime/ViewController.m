@@ -73,6 +73,16 @@ int cFunc(id receiver, SEL sel,int a,int b){
     CGRect frame = ((CGRect (*)(id,SEL))objc_msgSend_stret)(p, @selector(cStruct));
     NSLog(@"frame = %@",NSStringFromCGRect(frame));
    
+    // 使用IMP 函数指针直接调用方法
+    SEL sel = @selector(haha:age:);
+    Method method = class_getInstanceMethod(p.class, sel);
+    IMP imp = method_getImplementation(method);
+    NSString *str = ((id(*)(id, SEL,id,id))imp)(self, sel,@"Jack", @"18");
+    NSLog(@"str = %@ \n",str);
+    
+    imp = [p methodForSelector:sel];
+    str = ((id(*)(id, SEL,id,id))imp)(self, sel,@"Rouse", @"20");
+    NSLog(@"str = %@ \n",str);
 }
 
 
