@@ -7,6 +7,7 @@
 //
 
 #import "Person.h"
+#import <objc/runtime.h>
 
 @implementation Person
 
@@ -29,5 +30,27 @@
 - (CGRect)cStruct{
      CGRect rect = CGRectMake(0, 0, 200, 200);
     return rect;
+}
+
+
+// 拦截实例崩溃
+void instanceMethod(id self,SEL _cmd){
+    NSLog(@"动态添加实例方法实现避免崩溃。");
+}
+
++ (BOOL)resolveInstanceMethod:(SEL)sel {
+    class_addMethod([self class], @selector(instanceMethod), (IMP)instanceMethod, "v@:");
+    return YES;
+}
+
+void classesMethod(id self,SEL _cmd){
+    NSLog(@"动态添加类方法实现避免崩溃。");
+}
+
+// 拦截类方法奔溃
++ (BOOL)resolveClassMethod:(SEL)sel{
+    Class meta = objc_getMetaClass(class_getName([self class]));
+    class_addMethod([meta class], @selector(classesMethod), (IMP)classesMethod, "v@:");
+    return YES;
 }
 @end

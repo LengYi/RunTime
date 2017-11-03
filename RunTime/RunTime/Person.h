@@ -26,4 +26,9 @@
 // 返回结构体的函数
 - (CGRect)cStruct;
 
+// 崩溃模拟
+- (void)instanceMethod;
+
++ (void)classesMethod;
+
 @end
